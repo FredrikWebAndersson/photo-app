@@ -22,3 +22,23 @@ then update gemfile.lock by running
 ```bash
   $ bundle install --without production
 ```
+## Deploy to Heroku 
+Make sure to commit all changes to the git repository and then create and push to heroku
+```bash
+  $ heroku create 
+  $ heroku rename <new-name>
+  $ git push heroku master
+```
+Remember to use $ heroku run rails db:migrate when we push to heroku any commits. Only if we have any changes in database tables. So for now, we dont need to run this commande. 
+
+## Add Favicon 
+Add favicon.ico to App/assets/Images 
+display favicon by updating app/views/layout/application.html.erb 
+```ruby
+  <%= favicon_link_tag %>
+```
+references: https://semantic-ui.com/elements/icon.html
+
+## Images references 
+Unsplash : https://unsplash.com/
+
