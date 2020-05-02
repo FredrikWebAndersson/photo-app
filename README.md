@@ -24,6 +24,7 @@ then update gemfile.lock by running
 ```
 
 ## Deploy to Heroku 
+
 Make sure to commit all changes to the git repository and then create and push to heroku
 ```bash
   $ heroku create 
@@ -34,6 +35,7 @@ Remember to use $ heroku run rails db:migrate when we push to heroku any commits
 
 
 ## Setup: Authentication system 
+
 Add gems for devise and as well for Boostrap styling 
 ```ruby
   gem 'devise'
@@ -89,7 +91,8 @@ in welcome_controller, specify the skip action only for our :index action
   skip_before_action :authenticate_user!, only: [:index]
 ```
 
-## Setup: Boostrap layouts 
+# Setup: Boostrap layouts 
+
 ```bash
   $ rails generate bootstrap:install static
   $ rails g bootstrap:layout application (yes overwrite)
@@ -104,7 +107,8 @@ Add "//= require jquery" in app/assets/javascript/application.js
 Add "//= link application.js" in app/assets/config/manifest.js
 ```
 
-## Sending email confirmation 
+# Sending email confirmation 
+
 1 Add sendgrid with Heroku 
 ```bash
   $ heroku addons:create sendgrid:starter
@@ -156,6 +160,7 @@ Add:
 # Other useful stuff 
 
 ## Add Favicon 
+
 Add favicon.ico to App/assets/Images 
 display favicon by updating app/views/layout/application.html.erb 
 ```ruby
@@ -164,9 +169,11 @@ display favicon by updating app/views/layout/application.html.erb
 references: https://semantic-ui.com/elements/icon.html
 
 ## Images references 
+
 Unsplash : https://unsplash.com/
 
 ## Kill a local running rails server if terminal closed
+
 ```bash
   $ kill -9 $(lsof -i tcp:3000 -t)
 ```
