@@ -153,9 +153,18 @@ Add:
 6 in config/environments/production.rb
 Add:
 ```ruby
-  config.action_mailer.delivery_method = :smpt
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { :host => "fredrik-photo-app.herokuapp.com", :protocol => "https" }
   ```
+
+## Test email in production 
+
+Make a commit to git repo and push to heroku master, run rails db:migrate 
+Sign up a user and check if email function is working as expected. 
+I did run into an error... Typo ! i wrote smpt instead of smtp... 
+
+Set the mailer sender to something else in config/initializers/devise.rb
+like 'no-reply@example.com'
 
 # Other useful stuff 
 
