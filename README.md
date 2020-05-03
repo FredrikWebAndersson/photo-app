@@ -166,6 +166,39 @@ I did run into an error... Typo ! i wrote smpt instead of smtp...
 Set the mailer sender to something else in config/initializers/devise.rb
 like 'no-reply@example.com'
 
+# Add payment feature to sign up with Stripe 
+resources: https://stripe.com/docs/legacy-checkout/rails
+
+Save the API keys 
+Publishable key
+Secret key 
+
+Add Stripe to the Gemfile: 
+```ruby
+  gem 'stripe'
+```
+
+Create a new file stripe.rb in config/initializers
+```ruby
+Rails.configuration.stripe = {
+  :publishable_key => ENV['STRIPE_PUBLISHABLE_KEY'],
+  :secret_key => ENV['STRIPE_SECRET_KEY']  
+}
+
+Stripe.api_key = Rails.configuration.stripe[:secret_key]
+```
+
+Set the keys in local .profile or .zshrc file 
+```bash
+export STRIPE_SECRET_KEY=<secret_key>
+export STRIPE_PUBLISHABLE_KEY=<publishable_key>
+```
+Set the keys to heroku and run 
+```bash
+  $ heroku config:set STRIPE_SECRET_KEY=<secret_key>
+  $ heroku config:set STRIPE_PUBLISHABLE_KEY=<publishable_key>
+```
+
 # Other useful stuff 
 
 ## Add Favicon 

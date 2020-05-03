@@ -21,10 +21,15 @@ gem 'jbuilder', '~> 2.7'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+# use Devise for user authentification
   gem 'devise'
+# Use bootstrap gem helpers for devise views
   gem 'devise-bootstrap-views'
   gem 'twitter-bootstrap-rails'
+# Add Jquery for Bootstrap use 
   gem 'jquery-rails'
+# use Stripe for card payments 
+  gem 'stripe'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
