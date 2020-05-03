@@ -199,7 +199,7 @@ Set the keys to heroku and run
   $ heroku config:set STRIPE_PUBLISHABLE_KEY=<publishable_key>
 ```
 
-# Other useful stuff 
+<h1 align="center">Other useful stuff</h1>
 
 ## Add Favicon 
 
