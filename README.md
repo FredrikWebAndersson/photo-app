@@ -214,7 +214,7 @@ references: https://semantic-ui.com/elements/icon.html
 
 Unsplash : https://unsplash.com/
 
-## Kill a local running rails server if terminal closed
+## Kill a local running rails server if terminal closed
 
 ```bash
   $ kill -9 $(lsof -i tcp:3000 -t)
