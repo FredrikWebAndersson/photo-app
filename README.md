@@ -167,7 +167,9 @@ Set the mailer sender to something else in config/initializers/devise.rb
 like 'no-reply@example.com'
 
 <h1 align="center">Add payment feature to sign up with Stripe</h1>
-resources: https://stripe.com/docs/legacy-checkout/rails
+resources: https://dashboard.stripe.com/
+and https://stripe.com/docs/legacy-checkout/rails
+and https://stripe.com/docs/legacy-checkout/rails
 
 Save the API keys 
 Publishable key
@@ -268,6 +270,80 @@ Update the View for user registration to display the payment form:
   <% end %>
 ```
 
+## Javascript events 
+
+Using JavaScript to stop the handling of the submission, grab the payment details, sends it to Strip that verify and send a token back. At that point the JavaScript strips the CB info and submit the form to the server. 
+
+Insert this line in head tag in app/views/layouts/application.html.erb
+```ruby
+    <%= javascript_include_tag "https://js.stripe.com/v2/" %>
+```
+
+Insert this script tag on top op app/views/devise/registrations/new.html.erb
+```ruby
+<script language="Javascript">
+  Stripe.setPublishableKey("<%= ENV['STRIPE_PUBLISHABLE_KEY'] %>");
+</script>
+```
+Update form_for attributes with: 
+```ruby
+{role: 'cc_form'}
+```
+Create a new file in app/assets/javascripts 
+=> credit_card_form.js 
+add following functions 
+```javascript
+  $(document).on("ready turbolinks:load", function() {
+
+  var show_error, stripeResponseHandler, submitHandler;
+
+  submitHandler = function (event) {
+    var $form = $(event.target);
+    $form.find("input[type=submit]").prop("disabled", true);
+
+    //If Stripe was initialized correctly this will create a token using the credit card info
+    if(Stripe){
+      Stripe.card.createToken($form, stripeResponseHandler);
+    } else {
+      show_error("Failed to load credit card processing functionality. Please reload this page in your browser.")
+    }
+    return false;
+  };
+
+  $(".cc_form").on("submit", submitHandler);
+
+  stripeResponseHandler = function (status, response) {
+
+    var token, $form;    
+    $form = $('.cc_form');
+    
+    if (response.error) {  
+      console.log(response.error.message); 
+      show_error(response.error.message);   
+      $form.find("input[type=submit]").prop("disabled", false);   
+    } else {   
+      token = response.id;    
+      $form.append($("<input type=\"hidden\" name=\"payment[token]\" />").val(token));    
+      $("[data-stripe=number]").remove();    
+      $("[data-stripe=cvc]").remove();    
+      $("[data-stripe=exp-year]").remove();    
+      $("[data-stripe=exp-month]").remove();    
+      $("[data-stripe=label]").remove();    
+      $form.get(0).submit();    
+    }    
+    return false;   
+  };
+
+  show_error = function (message) {
+    if($("#flash-messages").size() < 1){ 
+      $('div.container.main div:first').prepend("<div id='flash-messages'></div>")   
+    }   
+      $("#flash-messages").html('<div class="alert alert-warning"><a class="close" data-dismiss="alert">×</a><div id="flash_alert">' + message + '</div></div>');   
+      $('.alert').delay(5000).fadeOut(3000);
+      return false;   
+  };
+});
+```
 
 <h1 align="center">Other useful stuff</h1>
 
