@@ -34,7 +34,7 @@ Make sure to commit all changes to the git repository and then create and push t
 Remember to use $ heroku run rails db:migrate when we push to heroku any commits. Only if we have any changes in database tables. So for now, we dont need to run this commande. 
 
 
-## Setup: Authentication system 
+## Setup: Authentication system 
 
 Add gems for devise and as well for Boostrap styling 
 ```ruby
@@ -91,7 +91,7 @@ in welcome_controller, specify the skip action only for our :index action
   skip_before_action :authenticate_user!, only: [:index]
 ```
 
-# Setup: Boostrap layouts 
+<h1 align="center">Setup: Boostrap layouts</h1>
 
 ```bash
   $ rails generate bootstrap:install static
@@ -166,7 +166,7 @@ I did run into an error... Typo ! i wrote smpt instead of smtp...
 Set the mailer sender to something else in config/initializers/devise.rb
 like 'no-reply@example.com'
 
-# Add payment feature to sign up with Stripe 
+<h1 align="center">Add payment feature to sign up with Stripe</h1>
 resources: https://stripe.com/docs/legacy-checkout/rails
 
 Save the API keys 
@@ -201,7 +201,7 @@ Set the keys to heroku and run
 
 <h1 align="center">Other useful stuff</h1>
 
-## Add Favicon 
+## Add Favicon 
 
 Add favicon.ico to App/assets/Images 
 display favicon by updating app/views/layout/application.html.erb 
