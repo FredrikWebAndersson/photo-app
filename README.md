@@ -198,6 +198,43 @@ Set the keys to heroku and run
   $ heroku config:set STRIPE_SECRET_KEY=<secret_key>
   $ heroku config:set STRIPE_PUBLISHABLE_KEY=<publishable_key>
 ```
+## Setup Pyament Model
+
+```bash
+  $ rails g model Payment email:string token:string user_id:integer
+  $ rails db:migrate
+```
+Set User.rb Model: 
+```ruby
+  has_one :payment 
+  accepts_nested_attributes_for :payment
+```
+
+Now setup Payment.rb Model 
+```ruby
+  attr_accessor :card_number, :card_cvv, :card_expires_month, :card_expires_year
+  belongs_to :user
+
+  def self.month_options
+    Date::MONTHNAMES.compact.each_with_index.map { |name, i| ["#{i+1} - #{name}", i+1] }
+  end
+
+  def self.year_options
+    (Date.today.year..(Date.today.year+10)).to_a
+  end
+
+  def process_payment
+    customer = Stripe::Customer.create email: email, card: token
+
+    Stripe::Charge.create customer: customer.id, 
+                          amount: 1000,
+                          description: "Premium",
+                          currency: "eur"
+  end
+```
+
+Update the View for user registration to display the payment form
+
 
 <h1 align="center">Other useful stuff</h1>
 
