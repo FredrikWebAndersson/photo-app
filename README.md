@@ -398,13 +398,65 @@ end
 
 Update the routes to read this new create action: 
 ```ruby
-    devise_for :users, :controllers => { :resgistrations => "resgistrations"}
+    devise_for :users, :controllers => { :registrations => "registrations"}
 ```
 
 Now try the feature on the server 
 Use a test credit card number => resources 
 > https://stripe.com/docs/testing
 
+Having problems with setting the Api keys locally ... in .profile .bashrc .zshrc ?? 
+One day it works, the other not 
+now .bashrc works...
+
+<h1 align="center">Upload images</h1>
+
+## Add gems 
+```ruby
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'fog-aws'
+```
+
+Generate a scaffold to create a Image table and set the One-to-Many association
+```bash
+  $ rails generate scaffold Image name:string picture:string user:references
+  $ rails db:migrate
+  $ rails g bootstrap:themed Images
+```
+(Overwrite to update all the views)
+
+Update model files user and Image
+user has_many :images 
+image belongs_to :user
+
+Generate an uploader for pictures 
+```bash
+  $ rails generate uploader Picture
+```
+Update Image model 
+```ruby
+  mount_uploader :picture, PictureUploader
+```
+
+=> Update our form view from Images views
+insert multipart: true inside html {}
+=> Update the picture input field to a file field and set the accepted image formats 
+```ruby
+  <%= f.file_field :picture, accept: "image/jpg,image/gif,image/png" %>
+```
+=> delete the user id input
+
+Track the current user in the create action for adding a picture 
+in the Images_controller, update the create action 
+```ruby
+    @image.user = current_user
+```
+
+Update show page for images to display picture: 
+```ruby
+<%= image_tag @image.picture.url if @image.picture? %>
+```
 
 <h1 align="center">Other useful stuff</h1>
 

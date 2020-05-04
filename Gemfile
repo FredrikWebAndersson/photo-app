@@ -30,6 +30,10 @@ gem 'jbuilder', '~> 2.7'
   gem 'jquery-rails'
 # use Stripe for card payments 
   gem 'stripe'
+# Use carrierwave, mini_magick and fog to upload images
+  gem 'carrierwave'
+  gem 'mini_magick'
+  gem 'fog-aws'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
