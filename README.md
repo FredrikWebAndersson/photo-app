@@ -345,6 +345,67 @@ add following functions
 });
 ```
 
+## Extend Devise Register create function
+Add a new controller in Controllers and update the devise create action as follow: registrations_controller.rb
+```ruby
+class RegistrationsController < Devise::RegistrationsController
+
+  def create
+    build_resource(sign_up_params)
+
+    resource.class.transaction do
+      ressource.save
+      yield resource if block_given?
+      if resource.persisted?
+        @payment = Payment.new({ email: params["user"]["email"],
+          token: params[:payment]["token"], user_id: resource.id })
+        flash[:error] = "Please check registration errors" unless @payment.valid?
+        
+        begin
+          @payment.process_payment
+          @payment.save
+        rescue Exception => e
+          flash[:error] = e.message
+          resource.destroy
+          puts "Payment failed"
+          render :new and return
+        end
+
+        if resource.active_for_authentication?
+          set_flash_message! :notice, :signed_up
+          sign_up(resource_name, resource)
+          respond_with resource, location: after_sign_up_path_for(resource)
+        else
+          set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
+          expire_data_after_sign_in!
+          respond_with resource, location: after_inactive_sign_up_path_for(resource)
+        end
+      else
+        clean_up_passwords resource
+        set_minimum_password_length
+        respond_with resource
+      end
+    end
+  end
+
+  protected
+
+  def configure_permitted_parameters 
+    devise_parameter_sanitizer.for(:sing_up).push(:payment)
+  end
+end
+```
+
+Update the routes to read this new create action: 
+```ruby
+    devise_for :users, :controllers => { :resgistrations => "resgistrations"}
+```
+
+Now try the feature on the server 
+Use a test credit card number => resources 
+> https://stripe.com/docs/testing
+
+
 <h1 align="center">Other useful stuff</h1>
 
 ## Add Favicon 
